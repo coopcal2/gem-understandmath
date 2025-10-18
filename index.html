@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understand Your Math — AI That Explains, Not Just Answers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #header.scrolled {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header -->
+    <header id="header" class="sticky top-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600 h-7 w-7"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                <span class="font-semibold text-lg">Understand Your Math</span>
+            </div>
+            <div>
+                 <a href="./chat.html" class="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Get Started</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 pt-16 pb-24">
+        <!-- Hero Section -->
+        <div id="main-card" class="max-w-xl mx-auto text-center fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">
+                Tired of AI just giving you the answer?
+            </h1>
+            <p class="text-lg text-slate-600 mb-8">
+                Finally, an AI that acts like a real tutor. We'll guide you through your math problems step-by-step, helping you actually <span class="font-semibold text-blue-600">understand</span> the concepts.
+            </p>
+            
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+                 <label for="math-problem" class="text-sm font-medium text-slate-700 block mb-2">Try it out — Enter your math problem:</label>
+                 <form id="problem-form">
+                    <input type="text" id="math-problem" name="math-problem" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Solve for x: 2x + 5 = 13">
+                    <div id="button-container" class="mt-4">
+                        <button id="explain-it-btn" type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed">
+                            <span>Start Learning</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                 </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-100 border-t border-slate-200">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+                <p>&copy; 2025 Understand Your Math. All rights reserved.</p>
+                <p class="mt-4 md:mt-0">Made to help students actually learn.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Google Sign-In Logic
+            const problemForm = document.getElementById('problem-form');
+            const mathProblemInput = document.getElementById('math-problem');
+            const explainItBtn = document.getElementById('explain-it-btn');
+            const buttonContainer = document.getElementById('button-container');
+            const GOOGLE_CLIENT_ID = '110268195675-25evr7visgd3repv1isbsb2a6rshs21m.apps.googleusercontent.com';
+
+            window.handleCredentialResponse = function(response) {
+                // Store the JWT token for chat.html to use
+                localStorage.setItem('google_credential', response.credential);
+
+                // Now, redirect to the chat page
+                const link = document.createElement('a');
+                link.href = './chat.html';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            window.onload = function () {
+              google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse
+              });
+            };
+
+            problemForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                explainItBtn.disabled = true;
+                explainItBtn.innerHTML = `<span>Attempting Sign-In...</span>`;
+                
+                const problem = mathProblemInput.value.trim();
+                
+                // Save problem to localStorage so chat.html can pick it up after redirect
+                if (problem) {
+                    localStorage.setItem('math_problem_prompt', problem);
+                } else {
+                    localStorage.removeItem('math_problem_prompt');
+                }
+                
+                // Trigger the Google One Tap sign-in prompt
+                google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        console.warn('Google One Tap was not displayed. Rendering button fallback.');
+                        
+                        // Fallback to a visible button if One Tap fails
+                        explainItBtn.style.display = 'none'; // Hide the original button
+                        
+                        // Create a container for the Google button if it doesn't exist
+                        let googleButtonContainer = document.getElementById('google-signin-button');
+                        if (!googleButtonContainer) {
+                            googleButtonContainer = document.createElement('div');
+                            googleButtonContainer.id = 'google-signin-button';
+                            googleButtonContainer.classList.add('flex', 'justify-center');
+                            buttonContainer.appendChild(googleButtonContainer);
+                        }
+
+                        // Render the official Google Sign-In button
+                        google.accounts.id.renderButton(
+                            googleButtonContainer,
+                            { theme: "outline", size: "large", text: "continue_with", shape: "rectangular", width: "320" }
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
