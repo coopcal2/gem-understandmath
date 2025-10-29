@@ -147,9 +147,6 @@
       const promptForm = document.getElementById("prompt-form");
       const promptInput = document.getElementById("prompt-input");
 
-      // 👇 Add your OpenRouter key here
-      const OPENROUTER_API_KEY = ""; // e.g., "sk-or-v1-xxxx"
-
       const chatHistory = [
         {
           role: "system",
@@ -204,13 +201,10 @@
         const thinking = showThinking();
 
         try {
-          const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          const response = await fetch("https://understandmath-proxy.leecoop42.workers.dev", {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${OPENROUTER_API_KEY}`,
               "Content-Type": "application/json",
-              "HTTP-Referer": "https://understandyourmath.com",
-              "X-Title": "Understand Your Math",
             },
             body: JSON.stringify({
               model: "gpt-4o-mini",
@@ -238,7 +232,7 @@
           thinking.remove();
           appendMessage(
             "assistant",
-            "⚠️ Sorry, there was an error connecting to the AI. Please check your connection or API key."
+            "⚠️ Sorry, there was an error connecting to the AI. Please check your connection or proxy."
           );
         }
       }
