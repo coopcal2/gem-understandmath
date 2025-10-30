@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Understand Your Math — No Login Required</title>
 
-  <!-- Tailwind CSS (fine for small production use) -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google Font -->
@@ -65,25 +65,31 @@
 
 <body class="text-slate-900 flex flex-col min-h-screen bg-[#F7F8FA]">
   <!-- 🔹 Header -->
-  <div class="flex items-center gap-6 text-slate-600 font-medium text-sm">
-  <a href="index" class="hover:text-blue-600 transition">Home</a>
-  <a href="about" class="hover:text-blue-600 transition">About</a>
-  <a href="help" class="hover:text-blue-600 transition">Help</a>
+  <nav class="w-full bg-white shadow-sm border-b border-slate-200">
+    <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
+      <a href="index" class="text-xl font-extrabold text-blue-700 tracking-tight">
+        Understand Your Math
+      </a>
+      <div class="flex items-center gap-6 text-slate-600 font-medium text-sm">
+        <a href="index" class="hover:text-blue-600 transition">Home</a>
+        <a href="about" class="hover:text-blue-600 transition">About</a>
+        <a href="help" class="hover:text-blue-600 transition">Help</a>
 
-  <!-- Instagram Logo -->
-  <a href="https://www.instagram.com/understandyourmath/" 
-     target="_blank" 
-     rel="noopener noreferrer" 
-     class="hover:text-blue-600 transition">
-    <svg xmlns="http://www.w3.org/2000/svg" 
-         viewBox="0 0 24 24" 
-         fill="#2563EB" 
-         class="w-5 h-5 hover:scale-110 transition-transform duration-200">
-      <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 4a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5zm4.88-.63a.88.88 0 1 1-1.76 0 .88.88 0 0 1 1.76 0z"/>
-    </svg>
-  </a>
-</div>
-
+        <!-- Instagram Logo -->
+        <a href="https://www.instagram.com/understandyourmath/" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="hover:text-blue-600 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               viewBox="0 0 24 24" 
+               fill="#2563EB" 
+               class="w-5 h-5 hover:scale-110 transition-transform duration-200">
+            <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 4a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5zm4.88-.63a.88.88 0 1 1-1.76 0 .88.88 0 0 1 1.76 0z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
 
   <!-- 🔹 Main -->
   <main class="flex-1 flex flex-col items-center px-4 py-6">
@@ -156,7 +162,6 @@
       const promptForm = document.getElementById("prompt-form");
       const promptInput = document.getElementById("prompt-input");
 
-      // Your Worker URL proxy (secured, no API key exposed)
       const WORKER_URL = "https://understandmath-proxy.leecoop42.workers.dev/";
 
       const chatHistory = [
