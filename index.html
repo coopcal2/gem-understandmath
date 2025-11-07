@@ -29,7 +29,7 @@
   <meta property="og:description" content="Understand Your Math is a free AI-powered math explainer that helps students truly understand concepts — not just copy answers.">
   <meta property="og:image" content="https://understandyourmath.com/logo.png">
 
-  <!-- X (Twitter) -->
+  <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://understandyourmath.com/">
   <meta property="twitter:title" content="Free AI-powered math tutor that helps you actually learn — No Sign-in Required">
@@ -58,23 +58,17 @@
       background-color: #F7F8FA;
       color: #0f172a;
     }
-
     .chat-container::-webkit-scrollbar { width:6px; }
     .chat-container::-webkit-scrollbar-thumb { background:#e2e8f0; border-radius:3px; }
-
     .message-card { opacity:0; transform:translateY(8px); animation:fadeIn .25s ease-out forwards; }
     @keyframes fadeIn { to { opacity:1; transform:translateY(0);} }
-
     .typewriter::after { content:"▮"; margin-left:2px; animation:blink 1s steps(1,end) infinite; }
     @keyframes blink { 50% { opacity:0; } }
-
     .toast { position:fixed; left:50%; transform:translateX(-50%); bottom:24px; background:#111827; color:#fff;
              padding:10px 14px; border-radius:10px; font-size:.9rem; box-shadow:0 6px 20px rgba(0,0,0,.12); animation:pop .2s ease; z-index:50; }
     @keyframes pop { from{ transform:translateX(-50%) scale(.96); opacity:0 } to{ transform:translateX(-50%) scale(1); opacity:1 } }
-
     .confetti { position:fixed; top:-10px; font-size:24px; animation:fall 1.2s ease-in forwards; z-index:60; }
     @keyframes fall { to { transform:translateY(110vh) rotate(360deg); opacity:.95 } }
-
     .chip { background:white; border:1px solid #e5e7eb; border-radius:9999px; padding:8px 12px; font-size:.9rem; }
     .chip:hover { border-color:#93c5fd; color:#1d4ed8; }
   </style>
@@ -89,9 +83,9 @@
         <img src="logo.png" alt="Understand Your Math logo" class="h-10 md:h-12 w-auto select-none transition-transform duration-200 hover:scale-105" />
       </a>
       <div class="flex items-center gap-6 text-slate-600 font-medium text-sm">
-        <a href="/" class="hover:text-blue-600 transition">Home</a>
-        <a href="about" class="hover:text-blue-600 transition">About</a>
-        <a href="help" class="hover:text-blue-600 transition">Help</a>
+        <a href="#home" class="hover:text-blue-600 transition">Home</a>
+        <a href="#about" class="hover:text-blue-600 transition">About</a>
+        <a href="#help" class="hover:text-blue-600 transition">Help</a>
         <a href="https://www.instagram.com/understandyourmath/" target="_blank" rel="noopener noreferrer"
            class="flex items-center text-slate-600 hover:text-blue-600 transition-transform duration-150 hover:scale-110" aria-label="Instagram">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -109,7 +103,6 @@
     </h1>
     <p class="text-md text-slate-600">🧠 No login. No sign-up. Just understanding.</p>
 
-    <!-- Example chips -->
     <div class="mt-5 flex flex-wrap justify-center gap-2">
       <button class="chip ex" data-text="Why do we invert and multiply when dividing fractions?">Invert & multiply?</button>
       <button class="chip ex" data-text="Explain heat capacity vs temperature in simple terms.">Heat capacity vs temp</button>
@@ -119,15 +112,12 @@
 
   <main class="flex-1 flex flex-col items-center px-4 py-6">
     <div class="w-full max-w-3xl flex flex-col h-full">
-
-      <!-- 🎮 Gamification Bar -->
       <div id="game-bar" class="flex items-center justify-between mb-4 bg-blue-50 border border-blue-100 rounded-lg p-3 text-sm font-medium text-blue-800">
         <div>🔥 Streak: <span id="streak-count">0</span> days</div>
         <div>⭐ XP: <span id="xp-count">0</span></div>
         <div>🏅 Level: <span id="level">1</span></div>
       </div>
 
-      <!-- Chat -->
       <section id="chat-container" class="chat-container flex-1 overflow-y-auto space-y-6 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
         <div class="ai-msg-container">
           <div class="message-card max-w-xl bg-white p-4 rounded-xl border border-slate-200">
@@ -137,7 +127,6 @@
         </div>
       </section>
 
-      <!-- Input -->
       <footer class="pt-4 pb-6">
         <form id="prompt-form" class="relative">
           <div class="bg-white rounded-xl shadow-md border border-slate-200">
@@ -166,29 +155,23 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="w-full border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500 mt-auto">
     <div class="flex justify-center gap-6 mb-2">
-      <a href="privacy" class="hover:text-blue-600">Privacy Policy</a>
-      <a href="status" class="hover:text-blue-600">Status</a>
-      <a href="terms" class="hover:text-blue-600">Terms</a>
+      <a href="#privacy" class="hover:text-blue-600">Privacy Policy</a>
+      <a href="#status" class="hover:text-blue-600">Status</a>
+      <a href="#terms" class="hover:text-blue-600">Terms</a>
     </div>
-    <p>© 2025 Understand Your Math & CAL — Made to help you understand, not just memorize.</p>
+    <p>© 2025 Understand Your Math — Made to help you understand, not just memorize.</p>
   </footer>
 
-  <!-- Scripts -->
   <script>
     const chatContainer = document.getElementById("chat-container");
     const promptForm = document.getElementById("prompt-form");
     const promptInput = document.getElementById("prompt-input");
-
     const WORKER_URL = "https://understandmath-proxy.leecoop42.workers.dev/";
 
     const chatHistory = [
-      {
-        role: "system",
-        content: "You are a Socratic math tutor. Help the user understand how to solve the problem, not just give the final answer. Use LaTeX for math formatting.",
-      },
+      { role: "system", content: "You are a Socratic math tutor. Help the user understand how to solve the problem, not just give the final answer. Use LaTeX for math formatting." },
     ];
 
     function appendMessage(role, content) {
@@ -196,7 +179,140 @@
       const container = document.createElement("div");
       container.className = isUser ? "user-msg-container" : "ai-msg-container";
       const bubble = document.createElement("div");
-      bubble.className = "message-card max-w-xl p-4 rounded-xl shadow-sm " +
+      bubble.className =
+        "message-card max-w-xl p-4 rounded-xl shadow-sm " +
         (isUser ? "bg-blue-100 text-blue-900" : "bg-white border border-slate-200");
       bubble.innerHTML = marked.parse(content);
-      container.a
+      container.appendChild(bubble);
+      chatContainer.appendChild(container);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      if (!isUser && window.MathJax) MathJax.typesetPromise([bubble]);
+    }
+
+    function showThinking() {
+      const el = document.createElement("div");
+      el.className = "ai-msg-container";
+      el.id = "thinking";
+      el.innerHTML =
+        '<div class="message-card max-w-xl bg-white p-4 rounded-xl shadow-sm border border-slate-200">' +
+        '<div class="flex items-center gap-3 text-slate-500">' +
+        '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-400"></div>' +
+        "<span>The AI is thinking...</span></div></div>";
+      chatContainer.appendChild(el);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      return el;
+    }
+
+    async function sendPrompt() {
+      const text = promptInput.value.trim();
+      if (!text) return;
+      appendMessage("user", text);
+      promptInput.value = "";
+      chatHistory.push({ role: "user", content: text });
+      const thinking = showThinking();
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ model: "gpt-4o-mini", messages: chatHistory }),
+        });
+        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+        const data = await response.json();
+        const aiReply = data?.choices?.[0]?.message?.content;
+        thinking.remove();
+        if (aiReply) {
+          appendMessage("assistant", aiReply);
+          chatHistory.push({ role: "assistant", content: aiReply });
+          addXP(10);
+          ensureDailyStreak();
+          maybeBadgeTriggers(text, aiReply);
+        } else appendMessage("assistant", "Sorry, I received an empty response. Try again.");
+      } catch (error) {
+        console.error("AI Error:", error);
+        thinking.remove();
+        appendMessage("assistant", "⚠️ Sorry, there was an error connecting to the AI. Please check your connection or proxy.");
+      }
+    }
+
+    promptForm.addEventListener("submit", (e) => { e.preventDefault(); sendPrompt(); });
+    promptInput.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendPrompt(); }});
+
+    document.querySelectorAll(".ex").forEach(btn => {
+      btn.addEventListener("click", () => {
+        promptInput.value = btn.dataset.text || btn.textContent;
+        promptInput.focus();
+      });
+    });
+
+    const typeEl = document.getElementById("type-line");
+    const baseLine = "Start understanding.";
+    let twIndex = 0;
+    function typeTick() { if (!typeEl) return; typeEl.textContent = baseLine.slice(0, twIndex++); if (twIndex <= baseLine.length) setTimeout(typeTick, 20);}
+    typeTick();
+
+    // Gamification logic
+    let xp = parseInt(localStorage.getItem("xp") || "0", 10);
+    let streak = parseInt(localStorage.getItem("streak") || "0", 10);
+    let lastActive = localStorage.getItem("lastActive") || null;
+    const xpEl = document.getElementById("xp-count");
+    const streakEl = document.getElementById("streak-count");
+    const levelEl = document.getElementById("level");
+
+    function updateUI() {
+      xpEl.textContent = xp;
+      streakEl.textContent = streak;
+      levelEl.textContent = Math.floor(xp / 100) + 1;
+    }
+
+    function toast(msg) {
+      const t = document.createElement("div");
+      t.className = "toast";
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2000);
+    }
+
+    function confettiBurst() {
+      const emojis = ["🎉","🎊","✨","🌟"];
+      for (let i=0;i<12;i++){
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        c.style.left = Math.random()*100 + "vw";
+        c.style.animationDuration = (0.8 + Math.random()*0.7) + "s";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),1500);
+      }
+    }
+
+    function addXP(amount) {
+      xp += amount;
+      localStorage.setItem("xp", xp);
+      updateUI();
+      confettiBurst();
+      toast(`+${amount} XP`);
+    }
+
+    function ensureDailyStreak() {
+      const today = new Date().toDateString();
+      if (lastActive !== today) {
+        streak++;
+        lastActive = today;
+        localStorage.setItem("streak", streak);
+        localStorage.setItem("lastActive", today);
+        toast("🔥 Streak extended!");
+      }
+      updateUI();
+    }
+
+    function maybeBadgeTriggers(input, output) {
+      if (input.toLowerCase().includes("fractions")) {
+        confettiBurst();
+        toast("🏅 Badge Unlocked: Fraction Master!");
+      }
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>
