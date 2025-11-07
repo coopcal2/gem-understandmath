@@ -1,110 +1,411 @@
-<style>
-  body {
-    font-family: "Inter", sans-serif;
-    background: linear-gradient(to bottom right, #e8f0ff, #ffffff);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Understand Your Math</title>
 
-  .chat-container::-webkit-scrollbar {
-    width: 6px;
-  }
-  .chat-container::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
-  }
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-1791332209139341">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1791332209139341" crossorigin="anonymous"></script>
 
-  .message-card {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeIn 0.3s ease-out forwards;
-  }
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q9N740CBD9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Q9N740CBD9');
+  </script>
 
-  @keyframes pop {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
+  <!-- Primary Meta -->
+  <meta name="title" content="Free AI-powered math tutor that helps you actually learn — No Sign-in Required">
+  <meta name="description" content="Understand Your Math is a free AI-powered math explainer that helps students truly understand concepts — not just copy answers. No logins, no ads, just learning.">
 
-  .chat-bubble {
-    animation: pop 0.25s ease;
-  }
-</style>
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://understandyourmath.com/">
+  <meta property="og:title" content="Free AI-powered math tutor that helps you actually learn — No Sign-in Required">
+  <meta property="og:description" content="Understand Your Math is a free AI-powered math explainer that helps students truly understand concepts — not just copy answers.">
+  <meta property="og:image" content="https://understandyourmath.com/logo.png">
+
+  <!-- X (Twitter) -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://understandyourmath.com/">
+  <meta property="twitter:title" content="Free AI-powered math tutor that helps you actually learn — No Sign-in Required">
+  <meta property="twitter:description" content="Understand Your Math is a free AI-powered math explainer that helps students truly understand concepts — not just copy answers.">
+  <meta property="twitter:image" content="https://understandyourmath.com/logo.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/falogo.png">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Markdown + MathJax -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    window.MathJax = { tex:{ inlineMath:[["\\(","\\)"]], displayMath:[["\\[","\\]"]] }, svg:{ fontCache:"global" } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* --- STRICTLY SCOPED, NO GLOBAL COLOR OVERRIDES --- */
+    html, body { background-color:#F7F8FA; }
+    body { font-family:"Inter", sans-serif; }
+
+    .chat-container::-webkit-scrollbar { width:6px; }
+    .chat-container::-webkit-scrollbar-thumb { background:#e2e8f0; border-radius:3px; }
+
+    .message-card { opacity:0; transform:translateY(8px); animation:fadeIn .25s ease-out forwards; }
+    @keyframes fadeIn { to { opacity:1; transform:translateY(0);} }
+
+    .typewriter::after { content:"▮"; margin-left:2px; animation:blink 1s steps(1,end) infinite; }
+    @keyframes blink { 50% { opacity:0; } }
+
+    /* Toast + badge popups */
+    .toast { position:fixed; left:50%; transform:translateX(-50%); bottom:24px; background:#111827; color:#fff;
+             padding:10px 14px; border-radius:10px; font-size:.9rem; box-shadow:0 6px 20px rgba(0,0,0,.12); animation:pop .2s ease; z-index:50; }
+    @keyframes pop { from{ transform:translateX(-50%) scale(.96); opacity:0 } to{ transform:translateX(-50%) scale(1); opacity:1 } }
+    .confetti { position:fixed; top:-10px; font-size:24px; animation:fall 1.2s ease-in forwards; z-index:60; }
+    @keyframes fall { to { transform:translateY(110vh) rotate(360deg); opacity:.95 } }
+
+    /* Example chips */
+    .chip { background:white; border:1px solid #e5e7eb; border-radius:9999px; padding:8px 12px; font-size:.9rem; }
+    .chip:hover { border-color:#93c5fd; color:#1d4ed8; }
+
+    /* Dark mode (opt-in) */
+    .dark body, .dark html { background-color:#0b1220; }
+  </style>
+</head>
 
 <body class="text-slate-900 flex flex-col min-h-screen">
 
-  <!-- 🌟 Header -->
-  <nav class="w-full backdrop-blur-md bg-white/70 border-b border-slate-200 sticky top-0 z-10">
+  <!-- Header -->
+  <nav class="w-full bg-white/90 backdrop-blur-sm border-b border-slate-200">
     <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
-      <a href="/" class="flex items-center gap-2 font-extrabold text-xl text-slate-800 hover:text-blue-700 transition">
-        <img src="/logo.png" class="h-10 w-auto" alt="Logo">
-        Understand Your Math
+      <a href="/" class="flex items-center">
+        <img src="logo.png" alt="Understand Your Math logo" class="h-10 md:h-12 w-auto select-none transition-transform duration-200 hover:scale-105" />
       </a>
-
       <div class="flex items-center gap-6 text-slate-600 font-medium text-sm">
-        <a href="/" class="hover:text-blue-600">Home</a>
-        <a href="/about" class="hover:text-blue-600">About</a>
-        <a href="/help" class="hover:text-blue-600">Help</a>
-        <a href="https://instagram.com/understandyourmath" target="_blank" class="hover:text-blue-600">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm4.25 5.5a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5z"/></svg>
+        <a href="/" class="hover:text-blue-600 transition">Home</a>
+        <a href="about" class="hover:text-blue-600 transition">About</a>
+        <a href="help" class="hover:text-blue-600 transition">Help</a>
+        <a href="https://www.instagram.com/understandyourmath/" target="_blank" rel="noopener noreferrer"
+           class="flex items-center text-slate-600 hover:text-blue-600 transition-transform duration-150 hover:scale-110" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+            <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 4a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5zm4.88-.63a.88.88 0 1 1-1.76 0 .88.88 0 0 1 1.76 0z"/>
+          </svg>
         </a>
+        <button id="theme-toggle" class="text-xs rounded-md border px-2.5 py-1 border-slate-300 hover:bg-slate-50">🌙</button>
       </div>
     </div>
   </nav>
 
-  <!-- 🧠 Hero -->
-  <header class="text-center py-10 px-4">
-    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight mb-3">
-      Stop <span class="text-red-500 line-through">plagiarizing</span>.<br>Start understanding.
+  <!-- Hero -->
+  <header class="text-center px-4 pt-8 pb-4">
+    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-3">
+      Stop <s class="text-red-500/80">plagiarizing</s>.<br><span id="type-line" class="typewriter">Start understanding.</span>
     </h1>
-    <p class="text-slate-600 text-lg">Your free AI math explainer — no sign-in, no distractions, just learning. 🧠</p>
+    <p class="text-md text-slate-600">🧠 No login. No sign-up. Just understanding.</p>
+
+    <!-- Example chips -->
+    <div class="mt-5 flex flex-wrap justify-center gap-2">
+      <button class="chip ex" data-text="Why do we invert and multiply when dividing fractions?">Invert & multiply?</button>
+      <button class="chip ex" data-text="Explain heat capacity vs temperature in simple terms.">Heat capacity vs temp</button>
+      <button class="chip ex" data-text="What is slope-intercept form? Show with a real example.">Slope-intercept form</button>
+    </div>
   </header>
 
-  <!-- 💬 Chat -->
-  <main class="flex-1 flex justify-center px-4 pb-8">
-    <div class="w-full max-w-3xl bg-white/70 backdrop-blur-xl shadow-xl border border-slate-200 rounded-3xl flex flex-col overflow-hidden">
-      
-      <!-- Chat messages -->
-      <section id="chat-container" class="chat-container flex-1 overflow-y-auto p-6 space-y-6">
-        <div class="ai-msg-container flex justify-start">
-          <div class="chat-bubble message-card max-w-xl bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+  <main class="flex-1 flex flex-col items-center px-4 py-6">
+    <div class="w-full max-w-3xl flex flex-col h-full">
+
+      <!-- 🎮 Gamification Bar -->
+      <div id="game-bar" class="flex items-center justify-between mb-4 bg-blue-50 border border-blue-100 rounded-lg p-3 text-sm font-medium text-blue-800">
+        <div>🔥 Streak: <span id="streak-count">0</span> days</div>
+        <div>⭐ XP: <span id="xp-count">0</span></div>
+        <div>🏅 Level: <span id="level">1</span></div>
+      </div>
+
+      <!-- Chat -->
+      <section id="chat-container" class="chat-container flex-1 overflow-y-auto space-y-6 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
+        <div class="ai-msg-container">
+          <div class="message-card max-w-xl bg-white p-4 rounded-xl border border-slate-200">
             <p class="font-semibold text-blue-600 mb-2">Math AI Tutor</p>
-            <p>Hey there 👋 Let’s explore some math together! Type your question below to start.</p>
+            <p>Hello! Let's solve some math problems together. Type your problem below to get started.</p>
           </div>
         </div>
       </section>
 
       <!-- Input -->
-      <footer class="border-t border-slate-200 bg-white/60 backdrop-blur-md px-4 py-3">
-        <form id="prompt-form" class="flex items-center gap-3">
-          <input id="prompt-input" type="text"
-            class="flex-1 bg-white/90 border border-slate-300 rounded-xl px-4 py-3 text-base placeholder:text-slate-400 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            placeholder="Type a math problem..." autocomplete="off" />
-          <button type="submit"
-            class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-5 py-3 font-medium flex items-center gap-2 transition-all duration-150">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon
-                points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-            Send
-          </button>
+      <footer class="pt-4 pb-6">
+        <form id="prompt-form" class="relative">
+          <div class="bg-white rounded-xl shadow-md border border-slate-200">
+            <input
+              type="text"
+              id="prompt-input"
+              class="w-full rounded-xl bg-transparent py-4 pl-5 pr-14 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              placeholder="Type a math problem..."
+              autocomplete="off"
+            />
+            <button
+              type="submit"
+              class="absolute inset-y-0 right-0 flex items-center justify-center w-14 h-full text-slate-400 hover:text-blue-600 transition-colors"
+              aria-label="Send"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
         </form>
       </footer>
     </div>
   </main>
 
-  <!-- 🌎 Footer -->
-  <footer class="w-full border-t border-slate-200 bg-white/70 backdrop-blur-md py-4 text-center text-xs text-slate-500 mt-auto">
-    <div class="flex justify-center gap-6 mb-1">
-      <a href="privacy" class="hover:text-blue-600">Privacy</a>
+  <!-- Footer -->
+  <footer class="w-full border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500 mt-auto">
+    <div class="flex justify-center gap-6 mb-2">
+      <a href="privacy" class="hover:text-blue-600">Privacy Policy</a>
       <a href="status" class="hover:text-blue-600">Status</a>
       <a href="terms" class="hover:text-blue-600">Terms</a>
     </div>
     <p>© 2025 Understand Your Math — Made to help you understand, not just memorize.</p>
   </footer>
+
+  <script>
+    // =========================
+    //  SAFE ENHANCEMENTS ONLY
+    // =========================
+    const chatContainer = document.getElementById("chat-container");
+    const promptForm = document.getElementById("prompt-form");
+    const promptInput = document.getElementById("prompt-input");
+    const themeToggle = document.getElementById("theme-toggle");
+
+    const WORKER_URL = "https://understandmath-proxy.leecoop42.workers.dev/";
+
+    // ---- Original chat history seed (unchanged) ----
+    const chatHistory = [
+      {
+        role: "system",
+        content:
+          "You are a Socratic math tutor. Help the user understand how to solve the problem, not just give the final answer. Use LaTeX for math formatting.",
+      },
+    ];
+
+    // ---- Render helpers (unchanged output, but with markdown) ----
+    function appendMessage(role, content) {
+      const isUser = role === "user";
+      const container = document.createElement("div");
+      container.className = isUser ? "user-msg-container" : "ai-msg-container";
+
+      const bubble = document.createElement("div");
+      bubble.className =
+        "message-card max-w-xl p-4 rounded-xl shadow-sm " +
+        (isUser ? "bg-blue-100 text-blue-900" : "bg-white border border-slate-200");
+
+      bubble.innerHTML = marked.parse(content);
+      container.appendChild(bubble);
+      chatContainer.appendChild(container);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      if (!isUser && window.MathJax) MathJax.typesetPromise([bubble]);
+    }
+
+    function showThinking() {
+      const el = document.createElement("div");
+      el.className = "ai-msg-container";
+      el.id = "thinking";
+      el.innerHTML =
+        '<div class="message-card max-w-xl bg-white p-4 rounded-xl shadow-sm border border-slate-200">' +
+        '<div class="flex items-center gap-3 text-slate-500">' +
+        '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-400"></div>' +
+        "<span>The AI is thinking...</span>" +
+        "</div></div>";
+      chatContainer.appendChild(el);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      return el;
+    }
+
+    async function sendPrompt() {
+      const text = promptInput.value.trim();
+      if (!text) return;
+
+      appendMessage("user", text);
+      promptInput.value = "";
+      chatHistory.push({ role: "user", content: text });
+
+      const thinking = showThinking();
+
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: chatHistory,
+          }),
+        });
+
+        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+
+        const data = await response.json();
+        const aiReply = data?.choices?.[0]?.message?.content;
+
+        thinking.remove();
+
+        if (aiReply) {
+          appendMessage("assistant", aiReply);
+          chatHistory.push({ role: "assistant", content: aiReply });
+
+          // 🎮 reward XP for asking
+          addXP(10);
+          ensureDailyStreak();
+          maybeBadgeTriggers(text, aiReply);
+        } else {
+          appendMessage("assistant", "Sorry, I received an empty response. Try again.");
+        }
+      } catch (error) {
+        console.error("AI Error:", error);
+        thinking.remove();
+        appendMessage("assistant", "⚠️ Sorry, there was an error connecting to the AI. Please check your connection or proxy.");
+      }
+    }
+
+    promptForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      sendPrompt();
+    });
+
+    // Enter to submit (input already handles, but ensure buttonless submit on mobile keyboards)
+    promptInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendPrompt();
+      }
+    });
+
+    // Example chips
+    document.querySelectorAll(".ex").forEach(btn => {
+      btn.addEventListener("click", () => {
+        promptInput.value = btn.dataset.text || btn.textContent;
+        promptInput.focus();
+      });
+    });
+
+    // Typewriter (simple)
+    const typeEl = document.getElementById("type-line");
+    const baseLine = "Start understanding.";
+    let twIndex = 0;
+    function typeTick() {
+      if (!typeEl) return;
+      typeEl.textContent = baseLine.slice(0, twIndex++);
+      if (twIndex <= baseLine.length) setTimeout(typeTick, 20);
+    }
+    typeTick();
+
+    // Dark mode toggle (class on <html>)
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem("uym-theme");
+    if (savedTheme === "dark") root.classList.add("dark");
+    themeToggle.addEventListener("click", () => {
+      root.classList.toggle("dark");
+      localStorage.setItem("uym-theme", root.classList.contains("dark") ? "dark" : "light");
+    });
+
+    // ======================
+    //   GAMIFICATION LOGIC
+    // ======================
+    let xp = parseInt(localStorage.getItem("xp") || "0", 10);
+    let streak = parseInt(localStorage.getItem("streak") || "0", 10);
+    let lastActive = localStorage.getItem("lastActive") || null;
+    const xpEl = document.getElementById("xp-count");
+    const streakEl = document.getElementById("streak-count");
+    const levelEl = document.getElementById("level");
+
+    function updateUI() {
+      xpEl.textContent = xp;
+      streakEl.textContent = streak;
+      levelEl.textContent = Math.floor(xp / 100) + 1;
+    }
+
+    function toast(msg) {
+      const t = document.createElement("div");
+      t.className = "toast";
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2000);
+    }
+
+    function confettiBurst() {
+      const emojis = ["🎉","🎊","✨","🌟"];
+      for (let i=0;i<12;i++){
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        c.style.left = Math.random()*100 + "vw";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(), 1400);
+      }
+    }
+
+    function addXP(amount) {
+      const prevLevel = Math.floor(xp / 100) + 1;
+      xp += amount;
+      localStorage.setItem("xp", xp);
+      const newLevel = Math.floor(xp / 100) + 1;
+      updateUI();
+      if (newLevel > prevLevel) {
+        confettiBurst();
+        appendMessage("assistant", `🎉 Level up! You reached **Level ${newLevel}** — keep going!`);
+      }
+    }
+
+    function ensureDailyStreak() {
+      const today = new Date().toDateString();
+      if (!lastActive) {
+        streak = 1;
+      } else if (lastActive !== today) {
+        const prev = new Date(lastActive);
+        const diffDays = Math.round((new Date(today) - prev) / (1000*60*60*24));
+        streak = (diffDays <= 1) ? streak + 1 : 1;
+      }
+      lastActive = today;
+      localStorage.setItem("streak", streak);
+      localStorage.setItem("lastActive", lastActive);
+      updateUI();
+    }
+
+    // Simple badges
+    function awardBadge(name) {
+      const key = "badge:" + name;
+      if (localStorage.getItem(key)) return; // one-time
+      localStorage.setItem(key, "1");
+      confettiBurst();
+      toast("🏅 Badge unlocked: " + name);
+    }
+
+    function maybeBadgeTriggers(userText, aiText) {
+      // First Q
+      if (parseInt(localStorage.getItem("qcount") || "0", 10) === 0) {
+        awardBadge("First Question 🎯");
+      }
+      const count = parseInt(localStorage.getItem("qcount") || "0", 10) + 1;
+      localStorage.setItem("qcount", count);
+      if (count === 10) awardBadge("Tenacious Learner x10 📚");
+      if (/why|how|explain|because/i.test(userText)) awardBadge("Curious Mind 💡");
+      if (streak >= 5) awardBadge("🔥 5-Day Streak");
+    }
+
+    // Init UI on load
+    ensureDailyStreak();
+    updateUI();
+  </script>
 </body>
+</html>
